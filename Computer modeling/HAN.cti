@@ -1,0 +1,109 @@
+"""
+Marinov, N. M, "A Detailed Chemical Kinetic Model for High Temperature Ethanol Oxidation"
+Int. J. Chem. Kinet. 31:183-220 (1999);
+Lawrence Livermore National Laboratory, Livermore, CA,
+UCRL-JC-131657
+UCRL-WEB-204236
+Review and release date: May 19, 2004.
+Date: Mon, 26 Apr 1999 15:25:31 -0700 (PDT)
+From: "Nick M. Marinov" <marinov@west.llnl.gov>
+
+Marinov, N. M, "A Detailed Chemical Kinetic Model for High Temperature Ethanol Oxidation"
+Int. J. Chem. Kinet. 31:183-220 (1999);
+Lawrence Livermore National Laboratory, Livermore, CA,
+UCRL-JC-131657
+UCRL-WEB-208393
+Review and release date: December 3, 2004.
+Date: Mon, 26 Apr 1999 15:25:31 -0700 (PDT)
+From: "Nick M. Marinov" <marinov@west.llnl.gov>
+
+"""
+
+units(length='cm', time='s', quantity='mol', act_energy='cal/mol')
+
+ideal_gas(name='gas_Mix',
+          elements="H O C N",
+          species="""h2o        hno3       n2o        han""",
+          reactions='all',
+          transport = "Mix",
+          initial_state=state(temperature=300.0, pressure=OneAtm))
+
+#-------------------------------------------------------------------------------
+# Species data
+#-------------------------------------------------------------------------------
+
+species(name='han',
+        atoms='H:4 N:2 O:4',
+        thermo=(NASA([300.00, 1000.00],
+                     [ 1.35318500E+00,  2.22002500E-02, -1.97881200E-05,
+                       8.77390800E-09, -1.65838400E-12, -1.73856300E+04,
+                       1.85186800E+01]),
+                NASA([1000.00, 5000.00],
+                     [ 7.00384500E+00,  5.81149300E-03, -2.33378900E-06,
+                       4.28881400E-10, -2.95938500E-14, -1.88995200E+04,
+                      -1.04786300E+01])),
+        transport = gas_transport(
+                        geom = "nonlinear",
+                        diam = 5.5,
+                        dipole = 2.17),
+        note='120519')
+
+species(name='h2o',
+        atoms='H:2 O:1',
+        thermo=(NASA([300.00, 1000.00],
+                     [ 3.38684200E+00,  3.47498200E-03, -6.35469600E-06,
+                       6.96858100E-09, -2.50658800E-12, -3.02081100E+04,
+                       2.59023300E+00]),
+                NASA([1000.00, 5000.00],
+                     [ 2.67214600E+00,  3.05629300E-03, -8.73026000E-07,
+                       1.20099600E-10, -6.39161800E-15, -2.98992100E+04,
+                       6.86281700E+00])),
+        transport = gas_transport(
+                        geom = "nonlinear",
+                        diam = 2.605,
+                        well_depth = 572.4,
+                        dipole = 1.844,
+                        rot_relax = 4),
+        note='20387')
+
+species(name='hno3',
+        atoms='H:1 N:1 O:3',
+        thermo=(NASA([300.00, 1000.00],
+                     [ 1.35318500E+00,  2.22002500E-02, -1.97881200E-05,
+                       8.77390800E-09, -1.65838400E-12, -1.73856300E+04,
+                       1.85186800E+01]),
+                NASA([1000.00, 5000.00],
+                     [ 7.00384500E+00,  5.81149300E-03, -2.33378900E-06,
+                       4.28881400E-10, -2.95938500E-14, -1.88995200E+04,
+                      -1.04786300E+01])),
+        transport = gas_transport(
+                        geom = "nonlinear",
+                        diam = 5.5,
+                        dipole = 2.17),
+        note='121286')
+
+species(name='n2o',
+        atoms='N:2 O:1',
+        thermo=(NASA([300.00, 1000.00],
+                     [ 2.54305800E+00,  9.49219300E-03, -9.79277500E-06,
+                       6.26384500E-09, -1.90182600E-12,  8.76510000E+03,
+                       9.51122200E+00]),
+                NASA([1000.00, 5000.00],
+                     [ 4.71897700E+00,  2.87371400E-03, -1.19749600E-06,
+                       2.25055200E-10, -1.57533700E-14,  8.16581100E+03,
+                      -1.65725000E+00])),
+        transport = gas_transport(
+                        geom = "linear",
+                        diam = 3.828,
+                        well_depth = 232.4,
+                        dipole = 0,
+                        rot_relax = 1),
+        note='121286')
+
+#-------------------------------------------------------------------------------
+# Reaction data
+#-------------------------------------------------------------------------------
+
+# Reaction 1
+reaction('4 han => 3 n2o + 2 hno3 + 7 h2o', [1.457516e+9, 0.0, 21161.8])
+# where Ea is in cal/mol (converted from kJ/mol)
